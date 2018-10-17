@@ -1,15 +1,26 @@
 package com.gallery.listofphotos;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Point;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.gallery.listofphotos.adapter.ImageAdapter;
 import com.gallery.listofphotos.adapter.RetrofitAdapter;
 import com.gallery.listofphotos.api.ApiInterface;
 import com.gallery.listofphotos.model.Example;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +96,39 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(String result) {
                 gridview.setAdapter(new ImageAdapter(MainActivity.this,array));
+                gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+
+                        // Setting Dialog Message
+                        final ImageView img = new ImageView(MainActivity.this);
+
+
+                        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+                        Display display = wm.getDefaultDisplay();
+                        Point size = new Point();
+                        display.getSize(size);
+                        int width = size.x;
+                        int height = size.y;
+
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT);
+                        img.setLayoutParams(lp);
+                        Picasso.with(MainActivity.this).load(array.get(i).getUrls().getRegular()).into(img);
+                        alertDialog.setView(img);
+                        alertDialog.setCancelable(true);
+                        alertDialog.setNegativeButton("Close",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Write your code here to execute after dialog
+                                        dialog.cancel();
+                                    }
+                                });
+                        alertDialog.show();
+                    }
+                });
                 pd.dismiss();
 
             }
