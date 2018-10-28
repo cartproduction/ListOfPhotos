@@ -10,7 +10,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitAdapter {
 
     public static final String BASE_URL = "https://api.unsplash.com/photos/";
-    public static final String TOP = "?client_id=2f9ec60bf00b6795fd14008461fac686ad448d28fe97af937c38860186ad5016&page=1";
+    public static final String CLIENT_ID = "2f9ec60bf00b6795fd14008461fac686ad448d28fe97af937c38860186ad5016";
+    public static final String QUERİES = "?client_id="+CLIENT_ID+"&page=1";
+
     private static Retrofit retrofit = null;
 
 

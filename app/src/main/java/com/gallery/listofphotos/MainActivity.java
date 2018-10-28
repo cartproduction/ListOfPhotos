@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import com.gallery.listofphotos.adapter.ImageAdapter;
 import com.gallery.listofphotos.adapter.RetrofitAdapter;
 import com.gallery.listofphotos.api.ApiInterface;
-import com.gallery.listofphotos.model.Example;
+import com.gallery.listofphotos.model.Response;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -27,12 +27,11 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 
 import static java.lang.Thread.sleep;
 
 public class MainActivity extends AppCompatActivity {
-    public List<Example> array = new ArrayList<Example>();
+    public List<Response> array = new ArrayList<Response>();
     GridView gridview;
     ProgressDialog pd;
     public int resCount = 0;
@@ -44,6 +43,12 @@ public class MainActivity extends AppCompatActivity {
         gridview = (GridView) findViewById(R.id.gridview);
 
 
+        getResponseAsync();
+
+
+    }
+
+    public void getResponseAsync() {
         new AsyncTask<String, Void, String>() {
 
             @Override
@@ -60,25 +65,7 @@ public class MainActivity extends AppCompatActivity {
             protected String doInBackground(String... params) {
 
 
-                ApiInterface apiService = RetrofitAdapter.getClient().create(ApiInterface.class);
-
-                Call<List<Example>> news = apiService.getImages();
-
-                news.enqueue(new Callback<List<Example>>() {
-                    @Override
-                    public void onResponse(Call<List<Example>> call, Response<List<Example>> response) {
-
-                        array=response.body();
-
-                        resCount++;
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Example>> call, Throwable t) {
-                        System.out.println(t.getMessage());
-                    }
-                });
+                retrofitCallback();
 
 
                 while(resCount != 1){
@@ -104,14 +91,6 @@ public class MainActivity extends AppCompatActivity {
                         // Setting Dialog Message
                         final ImageView img = new ImageView(MainActivity.this);
 
-
-                        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-                        Display display = wm.getDefaultDisplay();
-                        Point size = new Point();
-                        display.getSize(size);
-                        int width = size.x;
-                        int height = size.y;
-
                         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.MATCH_PARENT);
@@ -133,8 +112,26 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }.execute();
+    }
 
+    public void retrofitCallback() {
+        ApiInterface apiService = RetrofitAdapter.getClient().create(ApiInterface.class);
 
+        Call<List<Response>> news = apiService.getImages();
 
+        news.enqueue(new Callback<List<Response>>() {
+
+            @Override
+            public void onResponse(Call<List<Response>> call, retrofit2.Response<List<Response>> response) {
+                array=response.body();
+
+                resCount++;
+            }
+
+            @Override
+            public void onFailure(Call<List<Response>> call, Throwable t) {
+                System.out.println(t.getMessage());
+            }
+        });
     }
 }

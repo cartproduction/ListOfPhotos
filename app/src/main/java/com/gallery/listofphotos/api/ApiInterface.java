@@ -1,7 +1,7 @@
 package com.gallery.listofphotos.api;
 
 import com.gallery.listofphotos.adapter.RetrofitAdapter;
-import com.gallery.listofphotos.model.Example;
+import com.gallery.listofphotos.model.Response;
 
 import java.util.List;
 
@@ -14,6 +14,6 @@ import retrofit2.http.GET;
 
 public interface ApiInterface {
 
-    @GET(RetrofitAdapter.BASE_URL + RetrofitAdapter.TOP)
-    Call<List<Example>> getImages();
+    @GET(RetrofitAdapter.BASE_URL + RetrofitAdapter.QUERİES)
+    Call<List<Response>> getImages();
 }

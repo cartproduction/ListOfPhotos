@@ -13,7 +13,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.gallery.listofphotos.model.Example;
+import com.gallery.listofphotos.model.Response;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -25,9 +25,9 @@ import java.util.List;
 
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    public List<Example> array = new ArrayList<Example>();
+    public List<Response> array = new ArrayList<Response>();
 
-    public ImageAdapter(Context c,List<Example> array) {
+    public ImageAdapter(Context c,List<Response> array) {
         this.array = array;
         mContext = c;
     }
